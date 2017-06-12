@@ -9,16 +9,20 @@ Timer IMURead;
 Timer cycleSD;
 
 void setup() {
+  int pinButton = 3;
+  pinMode(pinButton, OUTPUT);
+  digitalWrite(pinButton, HIGH);
   I2c.begin();
   I2c.setSpeed(1);
   I2c.timeOut(500);
   I2c.write(MPU_addr, 0x6B, 0);  // PWR_MGMT_1 register
-  pinMode(10, OUTPUT);
-  digitalWrite(10, HIGH);
+  pinMode(3, OUTPUT);
+  digitalWrite(3, LOW);
   if (!SD.begin(10)) {
     return;
    }
    IMUData = SD.open( "Data.csv", FILE_WRITE);
+   IMUData.println("START");
    IMURead.every(5, logData);
    cycleSD.every(10000, cycleSDCard);
    
