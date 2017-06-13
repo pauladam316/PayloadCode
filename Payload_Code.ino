@@ -5,19 +5,18 @@
 File IMUData;
 const int MPU_addr = 0x68; // I2C address of the MPU-6050
 int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
+int pinButton = 3;
 Timer IMURead;
 Timer cycleSD;
-
+Timer LEDOff;
 void setup() {
-  int pinButton = 3;
   pinMode(pinButton, OUTPUT);
   digitalWrite(pinButton, HIGH);
+  LEDOff.after(10000, turnOff);
   I2c.begin();
   I2c.setSpeed(1);
   I2c.timeOut(500);
   I2c.write(MPU_addr, 0x6B, 0);  // PWR_MGMT_1 register
-  pinMode(3, OUTPUT);
-  digitalWrite(3, LOW);
   if (!SD.begin(10)) {
     return;
    }
@@ -30,8 +29,11 @@ void setup() {
 void loop() {
   IMURead.update();
   cycleSD.update(); 
+  LEDOff.update();
 }
-
+void turnOff() {
+   digitalWrite(pinButton, LOW);
+}
 void logData() {
  
   //Wire.beginTransmission(MPU_addr);
