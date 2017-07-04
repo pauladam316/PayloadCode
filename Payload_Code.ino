@@ -17,6 +17,8 @@ void setup() {
   I2c.setSpeed(1);
   I2c.timeOut(500);
   I2c.write(MPU_addr, 0x6B, 0);  // PWR_MGMT_1 register
+  I2c.write(MPU_addr, 0x1C, 2);
+  I2c.write(MPU_addr, 0x1B, 2);
   if (!SD.begin(10)) {
     return;
    }
